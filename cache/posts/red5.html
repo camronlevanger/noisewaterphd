@@ -1,0 +1,137 @@
+<p>.. title: Installing Red5 Server on Linux (CentOS)
+.. slug: install-red5-linux
+.. date: 2010/04/28 11:51:56
+.. tags: programming, devops, Red5, Java, Linux, CentOS</p>
+<h3>Red5 Installation Instructions</h3>
+<p><strong>NONE OF THIS WILL WORK WITHOUT ANT, So first install ANT &gt; 1.8.0</strong></p>
+<h4>STEP 1</h4>
+<p>Once ANT is installed we can download and install the Red5 server:
+We need Red5 version 0.9.RC1 specifically in order to have streaming work properly for the web phone.</p>
+<div class="code"><pre><span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">src</span>
+<span class="n">svn</span> <span class="n">checkout</span> <span class="n">http</span><span class="o">:</span><span class="c1">//red5.googlecode.com/svn/java/server/tags/0_9rc1/ red5</span>
+<span class="n">mv</span> <span class="n">red5</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span>
+<span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">red5</span>
+<span class="n">ant</span> <span class="n">prepare</span>
+<span class="n">ant</span> <span class="n">dist</span>
+</pre></div>
+
+
+<p><em>Once the compile is finished you should see:</em>
+<code>BUILD SUCCESSFUL</code></p>
+<h4>STEP 2</h4>
+<p>Now we need to set up the configuration directory: copy the conf directory from dist:</p>
+<div class="code"><pre><span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">dist</span><span class="o">/</span><span class="n">conf</span> <span class="p">.</span>
+<span class="p">.</span><span class="o">/</span><span class="n">red5</span><span class="p">.</span><span class="n">sh</span>
+</pre></div>
+
+
+<h4>STEP 3</h4>
+<p>If everything starts up nicely, then we can build an init script for Red5:</p>
+<p><code>vi /etc/init.d/red5</code></p>
+<p>Copy this text in:</p>
+<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46</pre></div></td><td class="code"><div class="code"><pre><span class="c">#!/bin/sh</span>
+<span class="c"># For RedHat and cousins:</span>
+<span class="c"># chkconfig: 2345 85 85</span>
+<span class="c"># description: Red5 flash streaming server</span>
+<span class="c"># processname: red5</span>
+<span class="nv">PROG</span><span class="o">=</span>red5
+<span class="nv">RED5_HOME</span><span class="o">=</span>/usr/local/red5
+<span class="nv">DAEMON</span><span class="o">=</span><span class="nv">$RED5_HOME</span>/<span class="nv">$PROG</span>.sh
+<span class="nv">PIDFILE</span><span class="o">=</span>/var/run/<span class="nv">$PROG</span>.pid
+<span class="c"># Source function library</span>
+. /etc/rc.d/init.d/functions
+<span class="o">[</span> -r /etc/sysconfig/red5 <span class="o">]</span> <span class="o">&amp;&amp;</span> . /etc/sysconfig/red5
+<span class="nv">RETVAL</span><span class="o">=</span>0
+<span class="k">case</span> “<span class="nv">$1</span>″ in
+start<span class="o">)</span>
+<span class="nb">echo</span> -n <span class="nv">$”</span>Starting <span class="nv">$PROG</span>: ”
+<span class="nb">cd</span> <span class="nv">$RED5_HOME</span>
+<span class="nv">$DAEMON</span> &gt;/dev/null 2&gt;/dev/null &amp;
+<span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$RETVAL</span> -eq 0 <span class="o">]</span>; <span class="k">then</span>
+<span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="nv">$PIDFILE</span>
+touch /var/lock/subsys/<span class="nv">$PROG</span>
+<span class="k">fi</span>
+<span class="o">[</span> <span class="nv">$RETVAL</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> success <span class="nv">$”$PROG</span> startup” <span class="o">||</span> failure <span class="nv">$”$PROG</span> startup”
+<span class="nb">echo</span>
+;;
+stop<span class="o">)</span>
+<span class="nb">echo</span> -n <span class="nv">$”</span>Shutting down <span class="nv">$PROG</span>: ”
+killproc -p <span class="nv">$PIDFILE</span>
+<span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+<span class="nb">echo</span>
+<span class="o">[</span> <span class="nv">$RETVAL</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -f /var/lock/subsys/<span class="nv">$PROG</span>
+;;
+restart<span class="o">)</span>
+<span class="nv">$0</span> stop
+<span class="nv">$0</span> start
+;;
+status<span class="o">)</span>
+status <span class="nv">$PROG</span> -p <span class="nv">$PIDFILE</span>
+<span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+;;
+*<span class="o">)</span>
+<span class="nb">echo</span> <span class="nv">$”</span>Usage: <span class="nv">$0</span> <span class="o">{</span>start|stop|restart|status<span class="o">}</span>”
+<span class="nv">RETVAL</span><span class="o">=</span>1
+<span class="k">esac</span>
+<span class="nb">exit</span> <span class="nv">$RETVAL</span>
+</pre></div>
+</td></tr></table>
+
+<p><em>Now start the service</em></p>
+<p><code>/etc/init.d/red5 start</code></p>
+<p><em>Check the server status:</em></p>
+<div class="code"><pre><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">red5</span> <span class="n">status</span>
+<span class="n">red5</span> <span class="p">(</span><span class="n">pid</span>  <span class="n">XXXXX</span><span class="p">)</span> <span class="n">is</span> <span class="n">running</span><span class="err">…</span>
+</pre></div>
+
+
+<h4>STEP 4</h4>
+<p><em>Now test the RED5 installation by opening following URL in browser:</em>
+<code>http://yourip:5080/</code></p>
+<p>That's it, enjoy hacking away on Red5 Server!</p>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"><channel><title>NoisewaterPHD (devops)</title><link>http://noisewaterphd.com</link><description>A bunch software engineering ramblings and experiments.</description><lastBuildDate>Mon, 04 Mar 2013 00:21:44 GMT</lastBuildDate><generator>nikola</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Installing Red5 Server on Linux (CentOS)</title><link>http://noisewaterphd.com/posts/install-red5-linux.html</link><description>&lt;p&gt;.. title: Installing Red5 Server on Linux (CentOS)
+.. slug: install-red5-linux
+.. date: 2010/04/28 11:51:56
+.. tags: programming, devops, Red5, Java, Linux, CentOS&lt;/p&gt;
+&lt;h3&gt;Red5 Installation Instructions&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;NONE OF THIS WILL WORK WITHOUT ANT, So first install ANT &amp;gt; 1.8.0&lt;/strong&gt;&lt;/p&gt;
+&lt;h4&gt;STEP 1&lt;/h4&gt;
+&lt;p&gt;Once ANT is installed we can download and install the Red5 server:
+We need Red5 version 0.9.RC1 specifically in order to have streaming work properly for the web phone.&lt;/p&gt;
+&lt;div class="code"&gt;&lt;pre&gt;&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;src&lt;/span&gt;
+&lt;span class="n"&gt;svn&lt;/span&gt; &lt;span class="n"&gt;checkout&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//red5.googlecode.com/svn/java/server/tags/0_9rc1/ red5&lt;/span&gt;
+&lt;span class="n"&gt;mv&lt;/span&gt; &lt;span class="n"&gt;red5&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;
+&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;local&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;red5&lt;/span&gt;
+&lt;span class="n"&gt;ant&lt;/span&gt; &lt;span class="n"&gt;prepare&lt;/span&gt;
+&lt;span class="n"&gt;ant&lt;/span&gt; &lt;span class="n"&gt;dist&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;Once the compile is finished you should see:&lt;/em&gt;
+&lt;code&gt;BUILD SUCCESSFUL&lt;/code&gt;&lt;/p&gt;
+&lt;h4&gt;STEP 2&lt;/h4&gt;
+&lt;p&gt;Now we need to set up the configuration directory: copy the conf directory from dist:&lt;/p&gt;
+&lt;div class="code"&gt;&lt;pre&gt;&lt;span class="n"&gt;cp&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="n"&gt;dist&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;conf&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;red5&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;STEP 3&lt;/h4&gt;
+&lt;p&gt;If everything starts up nicely, then we can build an init script for Red5:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;vi /etc/init.d/red5&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Copy this text in:&lt;/p&gt;
+&lt;table class="codehilitetable"&gt;&lt;tr&gt;&lt;td class="linenos"&gt;&lt;div class="linenodiv"&gt;&lt;pre&gt; 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46&lt;/pre&gt;&lt;/div&gt;&lt;/td&gt;&lt;td class="code"&gt;&lt;div class="code"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/bin/sh&lt;/span&gt;
+&lt;span class="c"&gt;# For RedHat and cousins:&lt;/span&gt;
+&lt;span class="c"&gt;# chkconfig: 2345 85 85&lt;/span&gt;
+&lt;span class="c"&gt;# description: Red5 flash streaming server&lt;/span&gt;
+&lt;span class="c"&gt;# processname: red5&lt;/span&gt;
+&lt;span class="nv"&gt;PROG&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;red5
+&lt;span class="nv"&gt;RED5_HOME&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/red5
+&lt;span class="nv"&gt;DAEMON&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$RED5_HOME&lt;/span&gt;/&lt;span class="nv"&gt;$PROG&lt;/span&gt;.sh
+&lt;span class="nv"&gt;PIDFILE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/var/run/&lt;span class="nv"&gt;$PROG&lt;/span&gt;.pid
+&lt;span class="c"&gt;# Source function library&lt;/span&gt;
+. /etc/rc.d/init.d/functions
+&lt;span class="o"&gt;[&lt;/span&gt; -r /etc/sysconfig/red5 &lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; . /etc/sysconfig/red5
+&lt;span class="nv"&gt;RETVAL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;0
+&lt;span class="k"&gt;case&lt;/span&gt; &amp;#8220;&lt;span class="nv"&gt;$1&lt;/span&gt;&amp;#8243; in
+start&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt; -n &lt;span class="nv"&gt;$&amp;#8221;&lt;/span&gt;Starting &lt;span class="nv"&gt;$PROG&lt;/span&gt;: &amp;#8221;
+&lt;span class="nb"&gt;cd&lt;/span&gt; &lt;span class="nv"&gt;$RED5_HOME&lt;/span&gt;
+&lt;span class="nv"&gt;$DAEMON&lt;/span&gt; &amp;gt;/dev/null 2&amp;gt;/dev/null &amp;amp;
+&lt;span class="nv"&gt;RETVAL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$?&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$RETVAL&lt;/span&gt; -eq 0 &lt;span class="o"&gt;]&lt;/span&gt;; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$!&lt;/span&gt; &amp;gt; &lt;span class="nv"&gt;$PIDFILE&lt;/span&gt;
+touch /var/lock/subsys/&lt;span class="nv"&gt;$PROG&lt;/span&gt;
+&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$RETVAL&lt;/span&gt; -eq 0 &lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; success &lt;span class="nv"&gt;$&amp;#8221;$PROG&lt;/span&gt; startup&amp;#8221; &lt;span class="o"&gt;||&lt;/span&gt; failure &lt;span class="nv"&gt;$&amp;#8221;$PROG&lt;/span&gt; startup&amp;#8221;
+&lt;span class="nb"&gt;echo&lt;/span&gt;
+;;
+stop&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt; -n &lt;span class="nv"&gt;$&amp;#8221;&lt;/span&gt;Shutting down &lt;span class="nv"&gt;$PROG&lt;/span&gt;: &amp;#8221;
+killproc -p &lt;span class="nv"&gt;$PIDFILE&lt;/span&gt;
+&lt;span class="nv"&gt;RETVAL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$?&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt;
+&lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="nv"&gt;$RETVAL&lt;/span&gt; -eq 0 &lt;span class="o"&gt;]&lt;/span&gt; &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; rm -f /var/lock/subsys/&lt;span class="nv"&gt;$PROG&lt;/span&gt;
+;;
+restart&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nv"&gt;$0&lt;/span&gt; stop
+&lt;span class="nv"&gt;$0&lt;/span&gt; start
+;;
+status&lt;span class="o"&gt;)&lt;/span&gt;
+status &lt;span class="nv"&gt;$PROG&lt;/span&gt; -p &lt;span class="nv"&gt;$PIDFILE&lt;/span&gt;
+&lt;span class="nv"&gt;RETVAL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$?&lt;/span&gt;
+;;
+*&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$&amp;#8221;&lt;/span&gt;Usage: &lt;span class="nv"&gt;$0&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;start|stop|restart|status&lt;span class="o"&gt;}&lt;/span&gt;&amp;#8221;
+&lt;span class="nv"&gt;RETVAL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;1
+&lt;span class="k"&gt;esac&lt;/span&gt;
+&lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="nv"&gt;$RETVAL&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;p&gt;&lt;em&gt;Now start the service&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;/etc/init.d/red5 start&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Check the server status:&lt;/em&gt;&lt;/p&gt;
+&lt;div class="code"&gt;&lt;pre&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;etc&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;init&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;red5&lt;/span&gt; &lt;span class="n"&gt;status&lt;/span&gt;
+&lt;span class="n"&gt;red5&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pid&lt;/span&gt;  &lt;span class="n"&gt;XXXXX&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;running&lt;/span&gt;&lt;span class="err"&gt;&amp;#8230;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;STEP 4&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;Now test the RED5 installation by opening following URL in browser:&lt;/em&gt;
+&lt;code&gt;http://yourip:5080/&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;That's it, enjoy hacking away on Red5 Server!&lt;/p&gt;</description><guid>http://noisewaterphd.com/posts/install-red5-linux.html</guid><pubDate>Wed, 28 Apr 2010 11:51:56 GMT</pubDate></item></channel></rss>
