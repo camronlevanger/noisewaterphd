@@ -207,7 +207,7 @@ post_compilers = {
 # INDEXES_PAGES = ""  # If this is empty, the default is 'old posts page %d' translated
 
 # Name of the theme to use. Themes are located in themes/theme_name
-# THEME = 'site'
+THEME = 'spacelab'
 
 # date format used to display post dates. (str used by datetime.datetime.strftime)
 # DATE_FORMAT = '%Y-%m-%d %H:%M'
@@ -244,14 +244,14 @@ CONTENT_FOOTER = CONTENT_FOOTER.format(email=BLOG_EMAIL,
 # http://disqus.com, and set DISQUS_FORUM to the short name you selected.
 # If you want to disable comments, set it to False.
 # Default is "nikolademo", used by the demo sites
-# DISQUS_FORUM = "nikolademo"
+DISQUS_FORUM = "noinoisewaterphd"
 
 # Create index.html for story folders?
 # STORY_INDEX = False
 # Enable comments on story pages?
 # COMMENTS_IN_STORIES = False
 # Enable comments on picture gallery pages?
-# COMMENTS_IN_GALLERIES = False
+COMMENTS_IN_GALLERIES = True
 
 # Enable Addthis social buttons?
 # Defaults to true
@@ -303,7 +303,16 @@ CONTENT_FOOTER = CONTENT_FOOTER.format(email=BLOG_EMAIL,
 
 # Google analytics or whatever else you use. Added to the bottom of <body>
 # in the default template (base.tmpl).
-# ANALYTICS = ""
+ANALYTICS = "<script type=\"text/javascript\">var _gaq = _gaq || [];\
+            _gaq.push(['_setAccount', 'UA-38999144-1']);\
+            _gaq.push(['_trackPageview']);\
+            (function() {var ga = document.createElement('script'); \
+                ga.type = 'text/javascript'; \
+                ga.async = true;\
+                ga.src = ('https:' == document.location.protocol ? \
+                    'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\
+                var s = document.getElementsByTagName('script')[0];\
+                 s.parentNode.insertBefore(ga, s);})();</script>"
 
 # The possibility to extract metadata from the filename by using a
 # regular expression.

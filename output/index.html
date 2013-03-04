@@ -35,12 +35,13 @@
         <div class="postbox">
         <h1><a href="posts/new-blog-nikola.html">New Blog Engine, Nikola</a>
         <small>  
-             Posted: 2013-02-27 18:52
+             Posted: 2013-03-03 21:51
         </small></h1>
         <hr><div><p>.. title: New Blog Engine, Nikola
 .. slug: new-blog-nikola
-.. date: 2013/02/27 18:52:05
-.. tags: web, blog, Nikola, Discus</p>
+.. date: 2013/03/03 21:51:56
+.. tags: web, blog, Nikola, Markdown, Discus</p>
+<h3>Hello, Nikola!</h3>
 <p>So after much deliberation I've switched my blog from <a href="http://wordpress.com">Wordpress</a> to <a href="https://github.com/ralsina/nikola">Nikola</a>, a static blog generator. Using Nikola, I can now keep all of my blog articles under source control, and in <a href="http://daringfireball.net/projects/markdown/">Markdown</a>!</p>
 <p>I'm currently just getting started with Nikola, but I will have most of my old posts imported soon, and I will have a full write up of my experience using Nikola in the next few days.</p>
 <p>I am also switching the discussions over to Discus, which will be a very nice addition.</p>
@@ -86,99 +87,7 @@ We need Red5 version 0.9.RC1 specifically in order to have streaming work proper
 <p>If everything starts up nicely, then we can build an init script for Red5:</p>
 <p><code>vi /etc/init.d/red5</code></p>
 <p>Copy this text in:</p>
-<table class="codehilitetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46</pre></div></td><td class="code"><div class="code"><pre><span class="c">#!/bin/sh</span>
-<span class="c"># For RedHat and cousins:</span>
-<span class="c"># chkconfig: 2345 85 85</span>
-<span class="c"># description: Red5 flash streaming server</span>
-<span class="c"># processname: red5</span>
-<span class="nv">PROG</span><span class="o">=</span>red5
-<span class="nv">RED5_HOME</span><span class="o">=</span>/usr/local/red5
-<span class="nv">DAEMON</span><span class="o">=</span><span class="nv">$RED5_HOME</span>/<span class="nv">$PROG</span>.sh
-<span class="nv">PIDFILE</span><span class="o">=</span>/var/run/<span class="nv">$PROG</span>.pid
-<span class="c"># Source function library</span>
-. /etc/rc.d/init.d/functions
-<span class="o">[</span> -r /etc/sysconfig/red5 <span class="o">]</span> <span class="o">&amp;&amp;</span> . /etc/sysconfig/red5
-<span class="nv">RETVAL</span><span class="o">=</span>0
-<span class="k">case</span> “<span class="nv">$1</span>″ in
-start<span class="o">)</span>
-<span class="nb">echo</span> -n <span class="nv">$”</span>Starting <span class="nv">$PROG</span>: ”
-<span class="nb">cd</span> <span class="nv">$RED5_HOME</span>
-<span class="nv">$DAEMON</span> &gt;/dev/null 2&gt;/dev/null &amp;
-<span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$RETVAL</span> -eq 0 <span class="o">]</span>; <span class="k">then</span>
-<span class="nb">echo</span> <span class="nv">$!</span> &gt; <span class="nv">$PIDFILE</span>
-touch /var/lock/subsys/<span class="nv">$PROG</span>
-<span class="k">fi</span>
-<span class="o">[</span> <span class="nv">$RETVAL</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> success <span class="nv">$”$PROG</span> startup” <span class="o">||</span> failure <span class="nv">$”$PROG</span> startup”
-<span class="nb">echo</span>
-;;
-stop<span class="o">)</span>
-<span class="nb">echo</span> -n <span class="nv">$”</span>Shutting down <span class="nv">$PROG</span>: ”
-killproc -p <span class="nv">$PIDFILE</span>
-<span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-<span class="nb">echo</span>
-<span class="o">[</span> <span class="nv">$RETVAL</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -f /var/lock/subsys/<span class="nv">$PROG</span>
-;;
-restart<span class="o">)</span>
-<span class="nv">$0</span> stop
-<span class="nv">$0</span> start
-;;
-status<span class="o">)</span>
-status <span class="nv">$PROG</span> -p <span class="nv">$PIDFILE</span>
-<span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
-;;
-*<span class="o">)</span>
-<span class="nb">echo</span> <span class="nv">$”</span>Usage: <span class="nv">$0</span> <span class="o">{</span>start|stop|restart|status<span class="o">}</span>”
-<span class="nv">RETVAL</span><span class="o">=</span>1
-<span class="k">esac</span>
-<span class="nb">exit</span> <span class="nv">$RETVAL</span>
-</pre></div>
-</td></tr></table><p><em>Now start the service</em></p>
+<script src="https://gist.github.com/camronlevanger/5080937.js"></script><p><em>Now start the service</em></p>
 <p><code>/etc/init.d/red5 start</code></p>
 <p><em>Check the server status:</em></p>
 <div class="code"><pre><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">red5</span> <span class="n">status</span>
@@ -200,7 +109,7 @@ status <span class="nv">$PROG</span> -p <span class="nv">$PIDFILE</span>
 <ul class="pager"></ul></div>
 
     
-       <script type="text/javascript">var disqus_shortname="nikolademo";(function(){var a=document.createElement("script");a.async=true;a.type="text/javascript";a.src="http://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("HEAD")[0]||document.getElementsByTagName("BODY")[0]).appendChild(a)}());</script></div>
+       <script type="text/javascript">var disqus_shortname="noinoisewaterphd";(function(){var a=document.createElement("script");a.async=true;a.type="text/javascript";a.src="http://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("HEAD")[0]||document.getElementsByTagName("BODY")[0]).appendChild(a)}());</script></div>
     </div> 
     <!--End of body content-->
 </div>
@@ -216,4 +125,4 @@ status <span class="nv">$PROG</span> -p <span class="nv">$PIDFILE</span>
     <li><a class="addthis_button_linkedin"></a></li>
     <li><a class="addthis_button_twitter"></a></li>
     </ul></div>
-    <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f7088a56bb93798"></script><!-- End of social buttons --><script src="assets/js/jquery-1.7.2.min.js" type="text/javascript"></script><script src="assets/js/bootstrap.min.js" type="text/javascript"></script><script src="assets/js/jquery.colorbox-min.js" type="text/javascript"></script><script src="assets/js/slides.min.jquery.js" type="text/javascript"></script><script type="text/javascript">jQuery("a.image-reference").colorbox({rel:"gal",maxWidth:"80%",maxHeight:"80%",scalePhotos:true});</script></body></html>
+    <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f7088a56bb93798"></script><!-- End of social buttons --><script type="text/javascript">var _gaq = _gaq || [];            _gaq.push(['_setAccount', 'UA-38999144-1']);            _gaq.push(['_trackPageview']);            (function() {var ga = document.createElement('script');                 ga.type = 'text/javascript';                 ga.async = true;                ga.src = ('https:' == document.location.protocol ?                     'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';                var s = document.getElementsByTagName('script')[0];                 s.parentNode.insertBefore(ga, s);})();</script><script src="assets/js/jquery-1.7.2.min.js" type="text/javascript"></script><script src="assets/js/bootstrap.min.js" type="text/javascript"></script><script src="assets/js/jquery.colorbox-min.js" type="text/javascript"></script><script src="assets/js/slides.min.jquery.js" type="text/javascript"></script><script type="text/javascript">jQuery("a.image-reference").colorbox({rel:"gal",maxWidth:"80%",maxHeight:"80%",scalePhotos:true});</script></body></html>
