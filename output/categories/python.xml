@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"><channel><title>NoisewaterPHD (Python)</title><link>http://noisewaterphd.com</link><description>A bunch software engineering ramblings and experiments.</description><lastBuildDate>Mon, 04 Mar 2013 00:58:45 GMT</lastBuildDate><generator>nikola</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>New Blog Engine, Nikola</title><link>http://noisewaterphd.com/posts/new-blog-nikola.html</link><description>&lt;p&gt;.. title: New Blog Engine, Nikola
+.. slug: new-blog-nikola
+.. date: 2013/03/03 11:49:49
+.. tags: web, blog, Nikola, Python, Markdown, Discus&lt;/p&gt;
+&lt;h3&gt;Hello, Nikola!&lt;/h3&gt;
+&lt;p&gt;So after much deliberation I've switched my blog from &lt;a href="http://wordpress.com"&gt;Wordpress&lt;/a&gt; to &lt;a href="https://github.com/ralsina/nikola"&gt;Nikola&lt;/a&gt;, a static blog generator. Using Nikola, I can now keep all of my blog articles under source control, and in &lt;a href="http://daringfireball.net/projects/markdown/"&gt;Markdown&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;I'm currently just getting started with Nikola, but I will have most of my old posts imported soon, and I will have a full write up of my experience using Nikola in the next few days.&lt;/p&gt;
+&lt;p&gt;I am also switching the discussions over to Discus, which will be a very nice addition.&lt;/p&gt;
+&lt;p&gt;Sorry for the long absence, I hope you haven't written me off.&lt;/p&gt;</description><guid>http://noisewaterphd.com/posts/new-blog-nikola.html</guid><pubDate>Sun, 03 Mar 2013 11:49:49 GMT</pubDate></item></channel></rss>
